@@ -1,0 +1,8 @@
+{
+  "name": "ASL.Models",
+  "references": [],
+  "overrideReferences": true,
+  "precompiledReferences": ["Newtonsoft.Json.dll"],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

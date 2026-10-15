@@ -1,0 +1,5 @@
+{
+  "name": "ASL.App",
+  "references": ["ASL.Core", "ASL.Models", "ASL.Services", "ASL.UI", "Unity.InputSystem", "Unity.XR.CoreUtils", "Unity.XR.Interaction.Toolkit", "Unity.XR.ARFoundation", "Unity.XR.OpenXR"],
+  "autoReferenced": true
+}

@@ -1,0 +1,52 @@
+# Secrets and machine-specific environment files (including .env.local)
+.env
+.env.*
+*.env
+*.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+*.jks
+*.keystore
+credentials.json
+service-account*.json
+
+# Dependencies, build products, local data and verification scratch files
+node_modules/
+dist/
+coverage/
+storage/
+/work/
+*.log
+*.tsbuildinfo
+**/bin/
+**/obj/
+
+# Unity generated and machine-specific files; retain Assets and .meta files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Bb]uild/
+[Bb]uilds/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.pidb
+
+# Local tooling/editor state
+.vs/
+.idea/
+.codex/
+.agents/
+.DS_Store
+Thumbs.db
+
+# Generated local verification output
+/outputs/frontend-core-test-results.xml

@@ -1,0 +1,5 @@
+{
+  "name": "ASL.UI",
+  "references": ["ASL.Core", "ASL.Models", "UnityEngine.UI", "Unity.TextMeshPro"],
+  "autoReferenced": true
+}

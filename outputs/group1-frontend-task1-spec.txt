@@ -1,0 +1,689 @@
+PROJECT: Adaptive Spatial Labs
+CURRENT SCOPE: GROUP 1 FRONTEND ONLY
+TARGET: Unity application for Meta Quest
+
+IMPORTANT:
+The supplied reference images are the visual source of truth for Group 1.
+Do not redesign them.
+Do not add new pages or new product concepts.
+Do not start Group 2.
+Do not build web/React frontend.
+
+The Group 1 reference screens include:
+- Landing page
+- Sign up
+- Sign in
+- Home / Projects
+- Meetings
+- My Space
+- Inbox
+- Profile
+- Settings
+- Project creation step 1
+- Project creation step 2
+- Project creation step 3
+- Project creation step 4
+- Project creation step 5
+- Project success
+
+For THIS TASK, do not implement all of them.
+Build the reusable Unity frontend foundation that these screens will use.
+
+==================================================
+TASK 1 GOAL
+==================================================
+
+Create the Unity/Meta Quest frontend foundation for Group 1.
+
+The result should establish:
+
+1. Unity project structure
+2. Meta Quest/OpenXR-ready configuration
+3. Group 1 design system
+4. reusable UI components
+5. application shell
+6. navigation framework
+7. API networking foundation
+8. authentication/session state foundation
+9. reusable screen architecture
+
+Do not yet implement full business flows.
+
+==================================================
+UNITY / QUEST
+==================================================
+
+The frontend is Unity/C#.
+
+Target:
+Meta Quest mixed reality.
+
+Use a current supported Unity LTS version already available in the project/environment.
+
+Use OpenXR / Meta XR packages where appropriate.
+
+Do not create a browser-style application outside Unity.
+
+The Group 1 screens are panel-based setup/product screens displayed in MR.
+
+They must be comfortable in headset:
+- readable
+- large touch/ray targets
+- not overly dense
+- consistent physical sizing
+- seated-friendly
+- usable with ray/controller interaction
+- architecture should allow hand interaction later
+
+Do not make them tiny desktop windows floating in space.
+
+==================================================
+REFERENCE IMAGE RULE
+==================================================
+
+Use the supplied Group 1 images as the visual reference.
+
+Preserve the overall visual language:
+
+- dark navy background
+- professional enterprise appearance
+- restrained blue accents
+- subtle component colors
+- NO excessive glow
+- NO neon cyberpunk styling
+- rounded panels
+- thin borders
+- clear hierarchy
+- large readable text
+- consistent spacing
+- simple icons
+- blue primary actions
+- white/light-gray typography
+
+The design should feel professional, calm, spatial, and technical.
+
+Do not invent a new visual style.
+
+==================================================
+MR SCALE / PANEL RULES
+==================================================
+
+Create initial physical-space constants rather than arbitrary per-screen values.
+
+Use approximate starting values:
+
+Main application panel:
+- width: about 1.15–1.2 meters
+- height: about 0.68–0.72 meters
+- default viewing distance: about 1.0–1.2 meters
+
+Expanded sidebar:
+- approximately 0.18–0.22 meters wide
+
+Top bar:
+- approximately 0.08–0.10 meters high
+
+Controls:
+- use large ray-friendly hit targets
+- do not make buttons depend only on text bounds
+
+These are initial constants that should be adjustable from one design-system location.
+
+Do not hard-code physical dimensions independently in every screen.
+
+==================================================
+MODULARITY IS CRITICAL
+==================================================
+
+Do not create one giant Unity scene or one giant MonoBehaviour.
+
+Do not create:
+- UIManager.cs that controls the whole application
+- AppManager.cs containing networking, navigation, auth, projects, and UI
+- 2000-line screen controllers
+- duplicated buttons/input styling on every screen
+- direct HTTP calls inside UI components
+
+Use modular feature folders and clear ownership.
+
+Suggested structure:
+
+Assets/
+  AdaptiveSpatialLabs/
+
+    Core/
+      App/
+      Navigation/
+      Networking/
+      Auth/
+      State/
+      Configuration/
+
+    UI/
+      DesignSystem/
+        Colors/
+        Typography/
+        Spacing/
+        Dimensions/
+        Icons/
+        States/
+
+      Components/
+        Buttons/
+        Inputs/
+        Dropdowns/
+        Cards/
+        Sidebar/
+        TopBar/
+        Tabs/
+        Stepper/
+        Badges/
+        EmptyStates/
+        Loading/
+        Errors/
+
+      Screens/
+        Landing/
+        Auth/
+        Home/
+        Meetings/
+        MySpace/
+        Inbox/
+        Profile/
+        Settings/
+        ProjectCreation/
+
+    Features/
+      Auth/
+      Projects/
+      Organizations/
+      Sources/
+      Preferences/
+
+    Models/
+      Api/
+      Domain/
+
+    Services/
+      Api/
+      Session/
+      Storage/
+
+    Tests/
+
+This exact structure may be adjusted if Unity conventions require it,
+but preserve the same modular boundaries.
+
+==================================================
+DESIGN SYSTEM
+==================================================
+
+Create reusable design tokens/constants for:
+
+COLORS
+
+Examples:
+- app background
+- panel background
+- panel secondary background
+- border
+- primary blue
+- primary blue hover/selected
+- text primary
+- text secondary
+- muted text
+- success
+- warning
+- error
+- private state
+- selected navigation item
+
+Do NOT add strong outer glows.
+
+Use color fills, borders, and contrast instead.
+
+--------------------------------------------------
+
+TYPOGRAPHY
+
+Create reusable typography styles for:
+
+- page title
+- section title
+- card title
+- body
+- secondary body
+- metadata
+- button label
+- input label
+- input text
+
+Do not configure fonts individually per screen.
+
+--------------------------------------------------
+
+SPACING
+
+Create reusable spacing values:
+- xs
+- sm
+- md
+- lg
+- xl
+
+--------------------------------------------------
+
+RADIUS / BORDER
+
+Create reusable:
+- panel radius
+- card radius
+- button radius
+- input radius
+- border thickness
+
+--------------------------------------------------
+
+PHYSICAL UI DIMENSIONS
+
+Create one central MR sizing configuration for:
+- main panel width/height
+- sidebar width
+- top bar height
+- standard button height
+- standard input height
+- minimum interaction target
+- default viewing distance
+
+==================================================
+REUSABLE UI COMPONENTS
+==================================================
+
+Build reusable prefabs/components for:
+
+1. PrimaryButton
+2. SecondaryButton
+3. IconButton
+4. TextInput
+5. PasswordInput
+6. DropdownInput
+7. SearchInput
+8. StandardCard
+9. ProjectCard shell
+10. SidebarNavItem
+11. TopBar
+12. Sidebar
+13. TabControl
+14. StepIndicator / Stepper
+15. StatusBadge
+16. Avatar
+17. SectionHeader
+18. LoadingState
+19. ErrorState
+20. EmptyState
+
+Do not implement screen-specific business logic in these components.
+
+Components should emit events/callbacks.
+
+==================================================
+GLOBAL APP SHELL
+==================================================
+
+Create the reusable shell used by the authenticated Group 1 screens.
+
+The shell must support:
+
+LEFT SIDEBAR:
+- Home
+- Meetings
+- My Space
+- Inbox
+- divider
+- Settings
+
+TOP BAR:
+- Adaptive Spatial Labs logo/name
+- search area
+- + New Project action
+- user avatar
+
+Important navigation rule:
+
+Avatar click:
+→ navigates directly to Profile screen
+
+Settings sidebar item:
+→ navigates directly to Settings screen
+
+Do NOT create a profile dropdown.
+
+The shell should allow the center content area to be swapped by navigation.
+
+==================================================
+NAVIGATION ARCHITECTURE
+==================================================
+
+Create explicit screen routing/navigation.
+
+Group 1 routes/states should support:
+
+Landing
+SignUp
+SignIn
+
+Home
+Meetings
+MySpace
+Inbox
+Profile
+Settings
+
+ProjectCreationBasics
+ProjectCreationStructure
+ProjectCreationInputs
+ProjectCreationEditors
+ProjectCreationReview
+ProjectCreationSuccess
+
+Do not implement Group 2 routes.
+
+Navigation should not depend on finding GameObjects by name.
+
+Create a clean screen registry/router/navigation service.
+
+Support:
+- Navigate
+- Back where appropriate
+- current route/screen state
+
+==================================================
+API NETWORKING FOUNDATION
+==================================================
+
+The Group 1 backend already exists.
+
+Create a reusable API client foundation.
+
+Do NOT make HTTP requests directly from screen scripts.
+
+Create an abstraction such as:
+
+IApiClient
+ApiClient
+
+Responsibilities:
+- base URL
+- GET
+- POST
+- PATCH
+- PUT
+- DELETE
+- JSON serialization/deserialization
+- Authorization header
+- structured errors
+- request cancellation/timeouts where practical
+
+Unity should use normal REST/JSON.
+
+Do not use browser-specific assumptions.
+
+==================================================
+API DTO FOUNDATION
+==================================================
+
+Create C# DTO models necessary to support Group 1 later.
+
+Do not implement business logic yet.
+
+At minimum define structures for:
+
+Auth:
+- SignUpRequest
+- SignUpResponse
+- LoginRequest
+- LoginResponse
+- RefreshRequest/Response where required
+
+User:
+- UserDto
+- UpdateProfileRequest
+- UserPreferenceDto
+
+Organization:
+- OrganizationDto
+- OrganizationMemberDto
+
+Project:
+- ProjectDto
+- CreateProjectRequest
+- CreateProjectResponse
+
+Project editor:
+- ProjectEditorDto
+
+Project structure:
+- ProjectStructureDto
+
+Layer:
+- ProjectLayerDto
+
+Source:
+- ProjectSourceDto
+
+API errors:
+- ApiErrorResponse
+- ApiError
+
+Match the existing backend contracts.
+Do not invent incompatible DTO shapes.
+
+If necessary, inspect the backend OpenAPI/routes/schemas and derive the C# DTOs from the real backend.
+
+==================================================
+AUTH SESSION FOUNDATION
+==================================================
+
+Create a SessionService / AuthSession abstraction.
+
+It should own:
+
+- access token
+- refresh token/session information
+- current user
+- authenticated state
+
+Do not store auth state inside individual screens.
+
+Create a token storage abstraction suitable for Unity.
+
+For development it may use a simple local implementation,
+but keep storage behind an interface.
+
+Example:
+
+ITokenStore
+
+Do not make the UI know where tokens are stored.
+
+==================================================
+APPLICATION STATE
+==================================================
+
+Do not create one global blob containing everything.
+
+For Group 1 create only small state containers/services such as:
+
+SessionState
+NavigationState
+ProjectListState
+ProjectCreationDraftState
+
+Do not add:
+ViewState
+MeetingSessionState
+SpatialState
+PersonalSpaceState
+
+Those belong to later groups.
+
+==================================================
+PROJECT CREATION DRAFT FOUNDATION
+==================================================
+
+Create the data structure that will later be shared across the 5 project creation screens.
+
+ProjectCreationDraft should support:
+
+- project name
+- description
+- organization
+- project type
+- visibility
+- selected template
+- configured layers
+- sources
+- editors
+
+The draft should live independently from the screen components.
+
+Changing screens must not destroy the draft.
+
+Do NOT send project creation to backend yet in Task 1.
+
+==================================================
+SCENE STRATEGY
+==================================================
+
+Avoid creating one separate heavy Unity scene for every Group 1 screen unless there is a strong technical reason.
+
+Prefer:
+- one lightweight application shell/scene
+- modular screen prefabs/views
+- controlled screen swapping/navigation
+
+Keep scene loading simple.
+
+Do not embed backend or domain logic into scenes.
+
+==================================================
+SCREEN PLACEHOLDERS
+==================================================
+
+Create lightweight placeholder views for all Group 1 routes so navigation can be tested.
+
+These placeholders only need:
+- correct page title
+- correct shell/navigation state
+- empty content region
+
+Do NOT fully reproduce each supplied screen yet.
+
+The point of Task 1 is to prove:
+- navigation
+- shell
+- dimensions
+- component library
+- code architecture
+
+==================================================
+LANDING / AUTH EXCEPTION
+==================================================
+
+Landing, Sign Up, and Sign In do NOT use the authenticated sidebar shell.
+
+Create a separate AuthShell / PublicShell foundation.
+
+It should support the centered panel style from the reference images.
+
+Do not fully implement forms yet.
+
+==================================================
+TESTING FOR TASK 1
+==================================================
+
+Before completion verify:
+
+1. Unity project opens with no compile errors
+2. Group 1 folder/module structure is clean
+3. design tokens are centralized
+4. main MR panel dimensions are centralized
+5. reusable components render correctly
+6. sidebar renders consistently
+7. top bar renders consistently
+8. clicking sidebar items changes placeholder screen
+9. clicking avatar opens Profile route directly
+10. clicking Settings opens Settings directly
+11. no profile dropdown exists
+12. public/auth screens can render without authenticated shell
+13. authenticated shell can render Home placeholder
+14. ProjectCreationDraft survives navigation between project wizard placeholders
+15. ApiClient can deserialize a simple known Group 1 backend response
+16. API error model can deserialize backend error response
+17. auth/session state is not stored in a screen MonoBehaviour
+18. no Group 2 feature has been implemented
+
+If automated Unity tests are practical, add EditMode tests for:
+- router
+- draft state
+- API DTO serialization/deserialization
+- session state
+
+==================================================
+DO NOT BUILD IN TASK 1
+==================================================
+
+Do not fully implement:
+
+Sign Up form behavior
+Sign In form behavior
+Home project fetching
+Meetings data
+My Space data
+Inbox data
+Profile editing
+Settings persistence
+Project creation business flow
+File picker
+File upload
+Editor search
+Project creation API call
+
+Those belong to subsequent Group 1 frontend tasks.
+
+Do not build:
+
+Group 2 project model
+Architecture objects
+Relationships
+3D architecture rendering
+Views
+Presentations
+Meetings realtime
+WebSockets
+AI
+Decision workflows
+
+==================================================
+DELIVERABLE
+==================================================
+
+At the end of Task 1 provide:
+
+1. final Unity folder tree
+2. packages/configuration added
+3. Meta Quest/OpenXR setup performed
+4. design-system token list
+5. reusable component list
+6. navigation architecture
+7. shell architecture
+8. API client architecture
+9. auth/session state architecture
+10. ProjectCreationDraft structure
+11. tests run and results
+12. Unity Editor verification result
+13. anything that still needs physical Quest-device testing
+
+STOP AFTER TASK 1.
+
+Do not continue automatically into Task 2.

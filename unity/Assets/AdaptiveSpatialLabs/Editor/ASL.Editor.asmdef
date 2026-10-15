@@ -1,0 +1,6 @@
+{
+  "name": "ASL.Editor",
+  "references": ["ASL.Core", "ASL.Models", "ASL.Services", "ASL.UI", "ASL.App", "UnityEngine.UI", "Unity.TextMeshPro", "Unity.InputSystem", "Unity.XR.Management", "Unity.XR.Management.Editor", "Unity.XR.OpenXR", "Unity.XR.OpenXR.Editor", "Unity.XR.Interaction.Toolkit", "Unity.XR.CoreUtils", "Unity.XR.ARFoundation", "Unity.XR.MetaOpenXR"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

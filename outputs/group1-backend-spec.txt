@@ -1,0 +1,1197 @@
+PROJECT: Adaptive Spatial Labs
+
+We are building a professional mixed-reality software architecture
+collaboration platform for Meta Quest.
+
+The frontend is built in Unity/C#.
+
+There is NO React/web frontend in the current V1.
+
+The backend must expose normal client-agnostic REST/JSON APIs so the
+Unity Quest application can consume them cleanly.
+
+Later, if we ever add another client, the backend should not require redesign.
+
+==================================================
+CURRENT IMPLEMENTATION SCOPE
+==================================================
+
+Implement GROUP 1 ONLY:
+
+IDENTITY + PROJECT FOUNDATION
+
+The complete Group 1 user flow is:
+
+Sign Up
+→ Sign In
+→ Home / Projects
+→ Create Project wizard
+→ Project Created
+→ project appears on Home
+→ Profile
+→ Settings
+
+Do NOT implement Group 2 or later functionality yet.
+
+==================================================
+TECH STACK
+==================================================
+
+Backend:
+- Node.js 22
+- TypeScript
+- strict TypeScript configuration
+- Fastify
+
+Database:
+- PostgreSQL
+
+ORM:
+- Drizzle ORM
+
+Validation:
+- Zod
+
+Authentication:
+- access token + refresh token
+- bearer-token based
+- must work naturally from Unity
+
+Password hashing:
+- Argon2id
+
+Testing:
+- Vitest
+- Fastify integration tests
+
+Files:
+- local development file storage initially
+- abstract it behind a StorageProvider
+- later we will replace it with cloud object storage
+
+API format:
+- REST
+- JSON
+- versioned under /api/v1
+
+Do NOT Dockerize yet.
+
+Docker will be added after the first integrated slice is working.
+
+==================================================
+IMPORTANT: UNITY / META QUEST CLIENT
+==================================================
+
+The primary frontend is Unity/C# running on Meta Quest.
+
+The backend must NOT depend on:
+
+- browser cookies
+- HTML forms
+- React
+- browser session state
+- localStorage
+- browser-specific redirects
+- browser-only authentication assumptions
+
+Unity should be able to call APIs using normal HTTP requests.
+
+Use:
+
+Authorization: Bearer <access-token>
+
+All API responses must use predictable JSON structures that map cleanly
+to C# DTOs.
+
+Use:
+- camelCase JSON
+- UUIDs represented as strings
+- ISO-8601 timestamps
+- stable string enum values
+- explicit nullable fields
+- predictable response structures
+
+Avoid unnecessarily dynamic JSON structures in public API responses.
+
+==================================================
+BACKEND ARCHITECTURE
+==================================================
+
+Build this as a MODULAR MONOLITH.
+
+We want one backend deployment, but the code must be divided cleanly
+by product domain.
+
+DO NOT create:
+
+- one giant app.service.ts
+- one giant project.service.ts
+- one controller containing all project functionality
+- direct database queries scattered through route handlers
+- authentication logic copied across routes
+- business logic inside HTTP controllers
+- giant shared global state
+- premature microservices
+
+Suggested structure:
+
+src/
+  app/
+    app.ts
+    server.ts
+
+  modules/
+
+    auth/
+      auth.routes.ts
+      auth.service.ts
+      auth.repository.ts
+      auth.schema.ts
+      auth.types.ts
+      auth.errors.ts
+
+    users/
+      user.routes.ts
+      user.service.ts
+      user.repository.ts
+      user.schema.ts
+
+    organizations/
+      organization.routes.ts
+      organization.service.ts
+      organization.repository.ts
+      organization.schema.ts
+
+    projects/
+      project.routes.ts
+      project.service.ts
+      project.repository.ts
+      project.schema.ts
+      project.authorization.ts
+
+    project-editors/
+      ...
+
+    project-structure/
+      ...
+      templates/
+
+    project-layers/
+      ...
+
+    project-sources/
+      ...
+
+    preferences/
+      ...
+
+  shared/
+    auth/
+    database/
+    errors/
+    validation/
+    storage/
+    logging/
+    config/
+
+Each module should own its domain responsibilities.
+
+Lower-level modules must not know about future modules such as:
+Views
+Meetings
+Presentations
+AI
+Decisions
+
+==================================================
+GROUP 1 DATA MODEL
+==================================================
+
+1. USER
+
+User:
+- id UUID
+- fullName
+- workEmail
+- normalizedEmail
+- passwordHash
+- designation
+- teamDepartment nullable
+- profileImage nullable
+- createdAt
+- updatedAt
+
+Rules:
+
+- workEmail must be unique
+- email comparison must be normalized
+- passwordHash must never be returned through API
+- designation is professional identity, not project permission
+
+Example designations:
+
+SYSTEM_ARCHITECT
+SOLUTION_ARCHITECT
+BACKEND_ENGINEER
+FRONTEND_ENGINEER
+FULLSTACK_ENGINEER
+STAFF_ENGINEER
+PRINCIPAL_ENGINEER
+TECHNICAL_LEAD
+PRODUCT_MANAGER
+BUSINESS_ANALYST
+QA_ENGINEER
+SRE_DEVOPS
+ENGINEERING_MANAGER
+DESIGNER
+SECURITY_ENGINEER
+OTHER
+
+Do not use designation to restrict product capabilities.
+
+==================================================
+2. ORGANIZATION
+==================================================
+
+Organization:
+- id UUID
+- name
+- createdAt
+- updatedAt
+
+OrganizationMember:
+- organizationId
+- userId
+- membershipRole
+- createdAt
+
+Keep organization functionality minimal in Group 1.
+
+We only need enough to support:
+
+- signup organization
+- project organization
+- searching eligible editors later
+
+Do not build a large organization administration system.
+
+==================================================
+3. PROJECT
+==================================================
+
+Project:
+- id UUID
+- organizationId
+- name
+- description
+- projectType
+- visibility
+- ownerUserId
+- status
+- createdAt
+- updatedAt
+
+Initial project types:
+
+PRODUCT_SYSTEM
+BACKEND_PLATFORM
+API_CENTERED
+EVENT_DRIVEN
+FRONTEND_BACKEND
+CUSTOM
+
+Initial visibility:
+
+RESTRICTED
+ORGANIZATION_DISCOVERABLE
+ORGANIZATION_OPEN
+
+Initial project statuses:
+
+ACTIVE
+ARCHIVED
+
+When a project is created:
+
+THE CREATOR AUTOMATICALLY BECOMES OWNER.
+
+Group 1 project access is deliberately simple.
+
+Project roles:
+
+OWNER
+EDITOR
+
+Do NOT create:
+VIEWER
+PRESENTER
+PARTICIPANT
+QA_REVIEWER
+etc.
+
+Those belong to later presentation/meeting domains.
+
+==================================================
+4. PROJECT EDITOR
+==================================================
+
+ProjectEditor:
+- projectId
+- userId
+- addedByUserId
+- createdAt
+
+Rules:
+
+OWNER:
+- full authority over project
+
+EDITOR:
+- can author/edit project content according to V1 rules
+
+An unrelated user must not access RESTRICTED project content.
+
+IMPORTANT:
+
+Project editor access and future presentation access are completely
+different concepts.
+
+Do not mix them.
+
+==================================================
+5. PROJECT STRUCTURE
+==================================================
+
+ProjectStructure:
+- id UUID
+- projectId
+- templateKey
+- createdAt
+- updatedAt
+
+Available initial template keys:
+
+PRODUCT_SYSTEM
+BACKEND_PLATFORM
+API_CENTERED
+EVENT_DRIVEN
+FRONTEND_BACKEND
+CUSTOM
+
+Templates are only INITIAL STRUCTURE PRESETS.
+
+They MUST NOT generate authoritative architecture.
+
+A template may initialize layer definitions.
+
+==================================================
+6. PROJECT LAYERS
+==================================================
+
+ProjectLayerDefinition:
+- id UUID
+- projectId
+- name
+- description nullable
+- sortOrder
+- source
+- createdAt
+- updatedAt
+
+Layer source:
+
+TEMPLATE
+USER_CREATED
+
+Example layers that a template may suggest:
+
+Product
+Feature
+Requirement
+Domain
+System
+Subsystem
+Service
+API
+Event
+Data
+Frontend
+Infrastructure
+External Integration
+
+The architect must be able to:
+
+- add layer
+- remove layer
+- rename layer
+- reorder layers
+
+Do NOT assume this list is exhaustive.
+
+Custom layers are first-class.
+
+==================================================
+7. PROJECT SOURCES
+==================================================
+
+ProjectSource:
+- id UUID
+- projectId
+- sourceType
+- name
+- status
+- storageKey nullable
+- externalReference nullable
+- metadata JSONB nullable
+- addedByUserId
+- createdAt
+- updatedAt
+
+Initial source types:
+
+FILE
+MIRO
+OPENAPI
+ARCHITECTURE_DOC
+PRODUCT_REQUIREMENT
+DIAGRAM
+
+Initial source statuses:
+
+PENDING
+UPLOADED
+CONNECTED
+PROCESSING
+READY
+FAILED
+
+Group 1 only establishes the source boundary.
+
+DO NOT implement:
+
+- AI document extraction
+- Miro OAuth
+- Miro synchronization
+- OpenAPI parsing
+- architecture recognition
+- feature recognition
+
+Those belong to Group 2.
+
+==================================================
+FILE STORAGE
+==================================================
+
+Actual file bytes must NOT be stored in PostgreSQL.
+
+Create:
+
+StorageProvider
+
+Conceptually:
+
+interface StorageProvider {
+  put(...)
+  get(...)
+  delete(...)
+}
+
+Implement:
+
+LocalStorageProvider
+
+for local development.
+
+ProjectSource should store:
+
+storageKey
+
+not a tightly coupled local filesystem path.
+
+Later the StorageProvider will be replaced with cloud object storage.
+
+==================================================
+8. USER PREFERENCES
+==================================================
+
+UserPreference:
+- userId
+- preferences JSONB
+- createdAt
+- updatedAt
+
+For now preferences may contain:
+
+{
+  theme,
+  reduceMotion,
+  notifications,
+  mrPreferences,
+  interactionPreferences
+}
+
+Do not over-model every Quest/MR preference yet.
+
+The JSONB model is acceptable for Group 1.
+
+==================================================
+AUTHENTICATION
+==================================================
+
+Implement:
+
+POST /api/v1/auth/signup
+
+POST /api/v1/auth/login
+
+POST /api/v1/auth/refresh
+
+POST /api/v1/auth/logout
+
+GET /api/v1/me
+
+PATCH /api/v1/me
+
+GET /api/v1/me/preferences
+
+PATCH /api/v1/me/preferences
+
+Use:
+
+short-lived access token
++
+refresh token/session
+
+Access tokens must work through:
+
+Authorization: Bearer <token>
+
+Store refresh sessions/tokens securely server-side where appropriate.
+
+Do not return raw stored refresh token values if unnecessary.
+
+Logout must invalidate the corresponding refresh session.
+
+==================================================
+API RESPONSE DESIGN
+==================================================
+
+Create stable API response DTOs.
+
+Example successful project response:
+
+{
+  "data": {
+    "id": "...",
+    "name": "Payments Platform",
+    "description": "...",
+    "projectType": "PRODUCT_SYSTEM",
+    "visibility": "RESTRICTED",
+    "ownerUserId": "...",
+    "status": "ACTIVE",
+    "createdAt": "...",
+    "updatedAt": "..."
+  }
+}
+
+Create one consistent error shape.
+
+Example:
+
+{
+  "error": {
+    "code": "PROJECT_FORBIDDEN",
+    "message": "You do not have access to this project.",
+    "details": null
+  }
+}
+
+Use appropriate HTTP status codes.
+
+Do not expose:
+- stack traces
+- SQL
+- internal paths
+- password hashes
+- secrets
+
+==================================================
+ORGANIZATION API
+==================================================
+
+Implement only endpoints necessary for Group 1.
+
+Examples:
+
+GET /api/v1/organizations
+
+POST /api/v1/organizations
+
+GET /api/v1/organizations/:organizationId/members
+
+The last endpoint will support editor selection.
+
+Authorization rules must apply.
+
+Do not build organization analytics/admin functionality.
+
+==================================================
+PROJECT API
+==================================================
+
+Implement:
+
+GET /api/v1/projects
+
+POST /api/v1/projects
+
+GET /api/v1/projects/:projectId
+
+PATCH /api/v1/projects/:projectId
+
+ARCHIVE rather than hard-delete projects initially.
+
+==================================================
+PROJECT EDITOR API
+==================================================
+
+GET
+/api/v1/projects/:projectId/editors
+
+POST
+/api/v1/projects/:projectId/editors
+
+DELETE
+/api/v1/projects/:projectId/editors/:userId
+
+Only an authorized owner should perform sensitive editor-management
+operations.
+
+==================================================
+PROJECT STRUCTURE API
+==================================================
+
+GET
+/api/v1/projects/:projectId/structure
+
+PUT
+/api/v1/projects/:projectId/structure
+
+==================================================
+PROJECT LAYER API
+==================================================
+
+GET
+/api/v1/projects/:projectId/layers
+
+POST
+/api/v1/projects/:projectId/layers
+
+PATCH
+/api/v1/projects/:projectId/layers/:layerId
+
+DELETE
+/api/v1/projects/:projectId/layers/:layerId
+
+Support explicit layer ordering.
+
+Do not infer layer order from creation time.
+
+==================================================
+PROJECT SOURCE API
+==================================================
+
+GET
+/api/v1/projects/:projectId/sources
+
+POST
+/api/v1/projects/:projectId/sources
+
+DELETE
+/api/v1/projects/:projectId/sources/:sourceId
+
+Implement the initial local-upload boundary.
+
+Do not perform AI processing yet.
+
+==================================================
+PROJECT CREATION WIZARD
+==================================================
+
+The Unity frontend has this creation flow:
+
+1 Project Basics
+2 Project Structure
+3 Existing Inputs
+4 Editors
+5 Review & Create
+6 Project Created celebration
+7 Proceed
+
+Do NOT treat the five wizard screens as five unrelated backend creation
+operations.
+
+The Unity client may keep the incomplete wizard state locally.
+
+When the user selects CREATE PROJECT on Review & Create, send one
+complete project-creation command.
+
+Conceptual example:
+
+{
+  "name": "Payments Platform",
+  "description": "Core payment platform architecture",
+  "organizationId": "...",
+  "projectType": "PRODUCT_SYSTEM",
+  "visibility": "RESTRICTED",
+
+  "structure": {
+    "templateKey": "PRODUCT_SYSTEM",
+    "layers": [
+      {
+        "name": "Product",
+        "sortOrder": 1
+      },
+      {
+        "name": "Service",
+        "sortOrder": 2
+      }
+    ]
+  },
+
+  "editorUserIds": [],
+
+  "sources": []
+}
+
+Implement project creation using a PostgreSQL transaction.
+
+Transaction must:
+
+1 create Project
+2 set creator as owner
+3 add project editors
+4 create ProjectStructure
+5 create project layers
+6 create/attach source metadata records
+7 commit
+
+If a critical operation fails:
+
+ROLLBACK EVERYTHING.
+
+The frontend must receive success only after the transaction commits.
+
+This ensures the Project Created celebration screen reflects a real,
+successfully persisted project.
+
+==================================================
+PROJECT AUTHORIZATION
+==================================================
+
+Create centralized authorization helpers.
+
+Do not duplicate permission conditions inside every route.
+
+Conceptual functions:
+
+requireAuthenticatedUser()
+
+requireProjectAccess()
+
+requireProjectOwner()
+
+requireProjectEditorOrOwner()
+
+Authorization behavior:
+
+OWNER:
+full Group 1 project access
+
+EDITOR:
+allowed project authoring operations
+
+UNRELATED USER:
+cannot access restricted project content
+
+Keep project authorization isolated from future presentation authorization.
+
+==================================================
+DATABASE / DRIZZLE
+==================================================
+
+Create schema and migrations for:
+
+users
+
+organizations
+
+organization_members
+
+projects
+
+project_editors
+
+project_structures
+
+project_layers
+
+project_sources
+
+user_preferences
+
+refresh_sessions / refresh_tokens
+(or another secure equivalent)
+
+Use:
+
+- UUID primary keys
+- foreign keys
+- unique constraints
+- indexes where useful
+- createdAt
+- updatedAt
+- cascading behavior only where deliberate
+
+Do not use database cascading blindly.
+
+Project ownership and source data should not disappear accidentally.
+
+==================================================
+ERROR MODEL
+==================================================
+
+Create centralized application errors.
+
+At minimum support:
+
+AUTH_EMAIL_ALREADY_EXISTS
+AUTH_INVALID_CREDENTIALS
+AUTH_UNAUTHORIZED
+AUTH_SESSION_EXPIRED
+
+USER_NOT_FOUND
+
+ORGANIZATION_NOT_FOUND
+ORGANIZATION_FORBIDDEN
+
+PROJECT_NOT_FOUND
+PROJECT_FORBIDDEN
+PROJECT_INVALID_STATE
+
+EDITOR_ALREADY_EXISTS
+EDITOR_NOT_FOUND
+
+LAYER_NOT_FOUND
+
+SOURCE_NOT_FOUND
+SOURCE_UPLOAD_FAILED
+
+VALIDATION_ERROR
+
+INTERNAL_ERROR
+
+Map these consistently to HTTP status codes.
+
+==================================================
+LOGGING
+==================================================
+
+Add structured backend logging.
+
+Never log:
+
+- passwords
+- access tokens
+- refresh tokens
+- sensitive auth secrets
+
+Log useful information such as:
+
+requestId
+route
+status
+duration
+userId when safe
+projectId when relevant
+error code
+
+==================================================
+ENVIRONMENT CONFIGURATION
+==================================================
+
+Use validated environment configuration.
+
+Example variables:
+
+PORT
+
+DATABASE_URL
+
+ACCESS_TOKEN_SECRET
+
+REFRESH_TOKEN_SECRET
+
+ACCESS_TOKEN_TTL
+
+REFRESH_TOKEN_TTL
+
+LOCAL_STORAGE_PATH
+
+NODE_ENV
+
+Fail startup clearly if required configuration is invalid.
+
+==================================================
+TESTING REQUIREMENTS
+==================================================
+
+Do not consider Group 1 complete until automated tests cover at least:
+
+AUTH
+
+1 signup succeeds
+2 duplicate email rejected
+3 login succeeds
+4 incorrect password rejected
+5 protected endpoint rejects unauthenticated request
+6 access token works
+7 refresh token flow works
+8 logout invalidates refresh session
+
+USER
+
+9 GET /me returns current user
+10 profile update works
+11 passwordHash is never exposed
+12 preferences read/update works
+
+ORGANIZATION
+
+13 organization creation works
+14 organization membership works
+15 organization member lookup respects authorization
+
+PROJECT
+
+16 project creation succeeds
+17 project creator becomes owner
+18 project appears in GET /projects
+19 GET project returns correct project
+20 restricted project blocks unrelated user
+21 editor gets permitted access
+22 owner-only action blocks editor when appropriate
+
+STRUCTURE
+
+23 template selection persists
+24 project layers persist
+25 custom layer can be added
+26 layer rename works
+27 layer reorder works
+28 layer removal works
+
+EDITORS
+
+29 editor can be added
+30 duplicate editor rejected safely
+31 editor can be removed
+
+SOURCES
+
+32 project source metadata persists
+33 source belongs to correct project
+34 unauthorized source access is blocked
+35 LocalStorageProvider can save/retrieve/delete development file
+
+TRANSACTION
+
+36 invalid project creation rolls back completely
+37 partial project is not left in database after failure
+
+API CONTRACT
+
+38 error format is consistent
+39 UUIDs/timestamps serialize correctly
+40 response DTOs are stable enough for Unity C# deserialization
+
+==================================================
+DO NOT IMPLEMENT YET
+==================================================
+
+DO NOT build any of these in Group 1:
+
+ArchitectureObject
+
+ObjectType
+
+RelationshipType
+
+Relationship
+
+Feature mapping
+
+Product-to-architecture mapping
+
+Evidence model
+
+AI recognition
+
+AI suggestions
+
+Embeddings
+
+Vector storage
+
+Spatial layout
+
+Views
+
+View suggestions
+
+Presentation
+
+Audience permissions
+
+Meetings
+
+WebSockets
+
+Realtime collaboration
+
+My Space backend
+
+Questions
+
+Tradeoffs
+
+Decisions
+
+Architecture proposals
+
+Tickets
+
+Readiness
+
+Miro synchronization
+
+Figma
+
+Jira
+
+GitHub
+
+Calendar integration
+
+Docker
+
+React
+
+Web frontend
+
+Do not add fake placeholder implementations for them.
+
+They belong to later product groups.
+
+==================================================
+MODULARITY RULES
+==================================================
+
+This is critical.
+
+Adaptive Spatial Labs will grow substantially.
+
+Do not place unrelated capabilities on the same page/module/file.
+
+Backend modules must remain independent and composable.
+
+If one file becomes responsible for multiple product concerns, split it.
+
+Examples:
+
+Auth service handles authentication.
+It does not create projects.
+
+Project service handles project orchestration.
+It does not parse files.
+
+Source service handles source metadata/storage.
+It does not perform AI extraction.
+
+Preferences service handles preferences.
+It does not control Quest rendering.
+
+Shared utilities must contain genuinely cross-cutting concerns only.
+
+Do not move domain business logic into "utils".
+
+Avoid circular module dependencies.
+
+Prefer explicit small modules over premature generic abstractions.
+
+==================================================
+STATE OWNERSHIP FOR FUTURE COMPATIBILITY
+==================================================
+
+Group 1 only implements canonical persistent account/project state.
+
+Keep the architecture prepared for future separation of:
+
+1 CANONICAL PROJECT STATE
+2 VIEW STATE
+3 LIVE SESSION STATE
+4 PERSONAL / PRIVATE STATE
+
+Do not implement these future systems now.
+
+Simply avoid designing Group 1 in a way that would force all state into
+one global project blob later.
+
+==================================================
+FINAL DELIVERABLE
+==================================================
+
+When implementation is complete, stop and provide:
+
+1 final backend folder tree
+
+2 explanation of module boundaries
+
+3 database schema summary
+
+4 migrations created
+
+5 API endpoint table
+
+6 authentication/token flow
+
+7 project permission rules
+
+8 project creation transaction explanation
+
+9 file-storage design
+
+10 environment variable example
+
+11 exact commands to:
+   - install dependencies
+   - create/configure PostgreSQL
+   - run migrations
+   - start development backend
+   - run tests
+
+12 test results
+
+13 assumptions made
+
+14 known limitations that belong intentionally to later groups
+
+Do not begin Group 2.
+
+Do not build frontend code.
+
+Do not build React.
+
+Do not Dockerize.
+
+Stop after Group 1 backend is fully working and tested.

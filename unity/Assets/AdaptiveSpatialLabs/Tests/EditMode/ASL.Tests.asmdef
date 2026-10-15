@@ -1,0 +1,9 @@
+{
+  "name": "ASL.Tests",
+  "references": ["ASL.Core", "ASL.Models", "ASL.Services", "ASL.UI", "ASL.App", "ASL.Editor", "UnityEngine.UI", "Unity.TextMeshPro"],
+  "overrideReferences": true,
+  "precompiledReferences": ["Newtonsoft.Json.dll", "nunit.framework.dll"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

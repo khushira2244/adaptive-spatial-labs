@@ -40,19 +40,23 @@ For every Group 2–7 interaction, check these during formal design. If a design
 
 **Miro connection intention:** Connect Miro → browser authorization → choose board → optionally choose relevant frames → connect. Users should not paste API keys or perform developer setup. Keep integration credentials securely on the backend, outside Unity and source metadata. A project source records board identity/name, team, and selected frames. Integration knowledge and project-source ownership remain separate. Actual OAuth scopes, token lifecycle, callback/status flow, and APIs must be verified against current official documentation before implementation; this is a design intention, not a completed integration.
 
-**Discussion/validation:** Clear progress, back/skip behavior, recoverable drafts/errors, understandable owner/editor/visibility choices, connection cancellation/failure, useful setup success state, and quick re-entry. Exact source-processing timing and the Project Created → Proceed destination remain to be settled for Group 2.
+**Discussion/validation:** Clear progress, back/skip behavior, recoverable drafts/errors, understandable owner/editor/visibility choices, connection cancellation/failure, useful setup success state, and quick re-entry. Group 2 now locks Project Created → Proceed → Architecture Review; see its specification for recovery and confirmation behavior.
 
-## Group 2 — Source Review + Canonical Model
+## Group 2 — Architecture Review (LOCKED)
 
-**Purpose:** Turn Miro/documents and other supported sources into a trustworthy, human-reviewed canonical architecture model.
+Product/core UX locked by the user on 2026-10-18. Read [the Group 2 design specification](group2-product-design-spec.md) for the complete agreed definition and [five saved reference images](group2-reference-images/). Written specification overrides older exploratory notes and conflicting image details. Documentation only; no implementation authorized.
 
-**Screens/states:** Imported Model Review; Project Main Workspace; Layer Configuration; Architecture Object Library; Object Inspector; Source/Evidence; Product ↔ Architecture Mapping.
+**Purpose:** Did ASL correctly understand the company's existing architecture? Reuse sources connected in Group 1; preserve recognizable source geometry and review imported architecture with contextual evidence and human confirmation.
 
-**Design notes:** Start from a source-faithful Miro projection, preserving meaningful positions/connectors. AI performs the heavy initial interpretation into candidate blocks, connections, hierarchy, and mappings with evidence and uncertainty. Confirm/Edit/Reject controls determine accepted truth. Support basic/expandable blocks and deeper hierarchy only where supported by real source data. Define block properties, layers, relationship visibility, lasso, context boxes, and hands select/grab/move/rotate/scale/open. Voice can refine a selection, for example direct relationships only. Context Pins link notes/questions to the correct block, area, or relationship.
+**Entry/exit:** Project Created → Proceed → Architecture Review. Confirm Architecture → Architecture Confirmed → Project Home. Group 3 is entered intentionally later, never forced automatically.
 
-**Design questions:** Exact first workspace after creation; center and left/right/top/near panels; candidate versus accepted appearance; partial confirmation; unsupported/missing source detail; manual creation; lasso membership/refinement; evidence display and context anchoring.
+**Spatial grammar:** Architecture center-front; collapsed Sources tab left and supporting evidence/context tab right; compact near toolbelt: Lasso, Attach, AI, Snapshot, Microphone, My Space. Top: Projects, Architecture Review, Recenter. No giant permanent Inspector.
 
-**Tests designed with this group:** Seated select/pinch/lasso accuracy; bring distant blocks near; recognizable expandable behavior and Back. Check source geometry/connectors, evidence, Confirm/Edit/Reject, no fake depth, and correct pin attachment. Increase block/arrow counts and profile selection, lasso, labels, and relationship rendering.
+**Interaction:** Hands primary, controllers optional, voice secondary. Small block/relationship context actions. Lasso selects conversational context, not presentation focus or permanent hiding. Attach supports Notes, Questions, AI Findings, Evidence at whole-model/object/relationship/lasso/imported-depth scope. Open shows real imported depth only; Back restores the prior level. Snapshot saves context/state and is not recording. My Space remains private without replacing the center. AI findings/proposed corrections never silently mutate architecture.
+
+**Boundary:** Group 2 is review, not a structural architecture editor. No box repositioning, connector drawing/endpoint dragging, layout redesign, manual internal-structure authoring, presentation configuration, or scenario system. Structural Edit Mode is deferred to Group 3; Group 3's detailed design remains to be settled.
+
+**Recovery/quality:** Restrained Confirmed/Source-backed or likely/Needs confirmation states; retry/back for source failure, review sources when no usable architecture exists; understandable panel closing, Projects/Back/Recenter and unsaved exit behavior. Retain all cross-cutting comfort, privacy and testing gates. No open questions for Group 2 core UX; technical implementation choices remain separate.
 
 ## Group 3 — Views + Spatial Representation
 
@@ -265,3 +269,4 @@ backend/
 **Still undecided:** Do not create top-level `proposals/` yet. Determine whether a proposal is an independent aggregate or a state/type owned by model, discussions, or decisions. Decide action ownership after Group 6 despite its illustrative placement above. Clarify project-configuration layers versus canonical model layers. The sketch is not exhaustive: existing preferences and other established responsibilities must retain an explicit owner in any future migration. No domain or data is removed merely because it is absent from this sketch.
 
 Keep this proposal appendix last when extending the main product-discussion sections.
+

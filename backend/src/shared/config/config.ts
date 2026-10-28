@@ -17,6 +17,14 @@ const configSchema = z
     LOCAL_STORAGE_PATH: z.string().min(1).default('./storage'),
     MAX_UPLOAD_BYTES: ttl.max(52428800).default(10485760),
   })
+  .refine(
+    (v) =>
+      v.NODE_ENV !== 'production' ||
+      ![v.ACCESS_TOKEN_SECRET, v.REFRESH_TOKEN_SECRET].some((secret) =>
+        /^(REPLACE_WITH_|CHANGE_ME)/.test(secret),
+      ),
+    { message: 'Production token secrets must not be example placeholders' },
+  )
   .refine((v) => v.ACCESS_TOKEN_SECRET !== v.REFRESH_TOKEN_SECRET, {
     message: 'Token secrets must be distinct',
   });

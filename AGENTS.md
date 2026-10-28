@@ -17,3 +17,5 @@ Implement a modular monolith organized by product domain. Keep frontend features
 Preserve separate ownership of project, view, meeting/session, and private personal state. Dependencies point from higher-level features to lower-level modules. Reuse concrete components when needed without premature universal abstractions. If a file starts owning more than one product concern, split it before continuing.
 
 Keep this modularity instruction at the top of daily implementation prompts.
+
+For text-entry design across Groups 1–7, follow `outputs/global-spatial-input-rules.md`: system keyboard rather than custom ASL keyboard, main form target 0.8–1.2 m, lower-front keyboard comfort target 0.5–0.8 m, active field visible, hands-only completion and seated comfort. Targets are user design intentions, not verified Meta standards or guaranteed OS placement controls. Verify platform capabilities and flag conflicts before implementation.

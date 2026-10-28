@@ -1,3 +1,4 @@
+import type { AIProvider } from '../src/modules/ai/providers/ai-provider.js';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -11,7 +12,7 @@ import { readConfig } from '../src/shared/config/config.js';
 import { buildApp } from '../src/app/app.js';
 import { organizationMembers } from '../src/shared/database/schema.js';
 
-export async function fixture() {
+export async function fixture(aiProvider: AIProvider | null = null) {
   const url = process.env.TEST_DATABASE_URL;
   if (!url || !new URL(url).pathname.endsWith('_test'))
     throw new Error(
@@ -20,7 +21,7 @@ export async function fixture() {
   const { db, pool } = connectDatabase(url);
   await migrate(db, { migrationsFolder: './migrations' });
   await db.execute(
-    sql`TRUNCATE refresh_sessions, user_preferences, project_sources, staged_uploads, project_layers, project_structures, project_editors, projects, organization_members, organizations, users`,
+    sql`TRUNCATE review_outcome_links, action_items, decisions, meeting_review_items, meeting_reviews, frozen_meeting_captures, shared_meeting_item_revisions, shared_meeting_items, presenter_transfer_requests, participant_private_state, meeting_shared_state, meeting_presentation_snapshots, meeting_invitations, meeting_participants, meetings, presentation_screen_knowledge_references, scenario_overlay_connections, presentation_screen_definitions, presentation_screens, presentation_invitations, presentation_access_grants, presentations, knowledge_contexts, knowledge_items, snapshots, architecture_connection_provenance, architecture_node_provenance, architecture_graph_provenance, inner_architecture_references, architecture_connections, architecture_nodes, architecture_graphs, architectures, ingestion_run_references, ingestion_runs, source_references, operation_results, scoped_guest_access, refresh_sessions, user_preferences, project_sources, staged_uploads, project_layers, project_structures, project_editors, projects, organization_members, organizations, users`,
   );
   const storagePath = await mkdtemp(join(tmpdir(), 'asl-group1-'));
   const storage = new LocalStorageProvider(storagePath);
@@ -31,7 +32,7 @@ export async function fixture() {
     REFRESH_TOKEN_SECRET: randomBytes(32).toString('hex'),
     LOCAL_STORAGE_PATH: storagePath,
   });
-  const app = await buildApp({ db, config, storage });
+  const app = await buildApp({ db, config, storage, aiProvider });
   return {
     app,
     db,

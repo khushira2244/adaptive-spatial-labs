@@ -11,11 +11,12 @@ try {
     config,
     storage: new LocalStorageProvider(config.LOCAL_STORAGE_PATH),
   });
-  app.addHook('onClose', async () => {
-    await pool.end();
-  });
   const shutdown = async () => {
-    await app.close();
+    try {
+      await app.close();
+    } finally {
+      await pool.end();
+    }
   };
   process.once('SIGINT', shutdown);
   process.once('SIGTERM', shutdown);

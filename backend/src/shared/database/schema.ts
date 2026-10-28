@@ -257,3 +257,16 @@ export const refreshSessions = pgTable(
     index('refresh_user_idx').on(t.userId),
   ],
 );
+
+export { scopedGuestAccess, operationResults } from './foundation-schema.js';
+
+export * from '../../modules/project-sources/provenance.schema.js';
+export * from '../../modules/architecture/architecture.schema.js';
+
+export * from '../../modules/knowledge/knowledge.schema.js';
+
+export * from '../../modules/presentations/presentation.schema.js';
+
+export * from '../../modules/meetings/meeting.schema.js';
+
+export * from '../../modules/outcomes/outcome.schema.js';

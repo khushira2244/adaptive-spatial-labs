@@ -520,6 +520,33 @@ User-provided interaction design table. Meta interaction primitives are intended
 
 “No forced notes taxonomy” means generic attached context rather than a hardcoded scenario workflow; it preserves the agreed Notes, Questions, AI Findings, and Evidence categories. The two-foot constraint applies to the user's physical action, not the architecture's rendered extent. Controller button mappings are fallback intentions, not finalized hardware bindings.
 
+## Confirmation follow-up references — 2026-10-19
+
+Two additional discussion images are saved: `group2-reference-images/06-review-confirmation-actions.png` and `group2-reference-images/07-review-correction-confirmation-workflow.png`. These supplement the original five references; the earlier statement that no sixth reference was supplied describes the initial handoff only.
+
+The user finalized confirmation routing on 2026-10-19: the popup belongs to Group 2 and opens ONLY after an explicit press of Confirm Architecture. Never open it on review load, exploration, Edit/Correction Mode, Group 3 Done, or return from correction. Cancel closes it and leaves the user in Group 2 without confirming. Confirm commits acceptance of the reviewed model; after successful confirmation, show Architecture Confirmed and return to Project Home. Group 3 Done saves corrected candidate work and returns to Group 2 review without final acceptance. Backend save/failure mechanics remain implementation details, not grounds to change this routing.
+
+Resolved by the subsequent 2026-10-19 handoff: Group 3 is the temporary Correction Editor described in `group3-correction-editor-spec.md`. Earlier spatial Views material remains for future placement. Group 2 review exposes Edit/Correction Mode; Done returns from correction to review, and final confirmation remains Group 2 responsibility. The confirmation-popup UX is now specified below.
+
+## Confirmation popup — finalized UX
+
+Small, clean popup:
+
+```text
+Confirm this architecture?
+
+This will save the reviewed architecture as the
+confirmed project model.
+
+[Cancel]   [Confirm]
+```
+
+Direct route: Group 2 review → Confirm Architecture → popup → Confirm → Architecture Confirmed → Project Home.
+
+Correction route: Group 2 → Edit/Correction Mode → Group 3 → Done → Group 2 review → Confirm Architecture → popup → Confirm → Architecture Confirmed → Project Home.
+
+Cancel in either route leaves the user reviewing in Group 2. Edit never opens this popup. Group 3 Done means correction finished, not architecture accepted. The popup is the final safeguard before acceptance is committed. This is documentation only, not authorization to implement.
+
 ## Open Questions: NONE for Group 2 core UX
 
 No blocking contradiction was found within the locked core UX. Earlier exploratory notes that included manual model creation/editing, permanent inspectors, or presentation focus inside Group 2 are superseded by this specification. Group 2 supports review, confirmation, correction flags and proposed understanding; it does not provide free structural editing.
@@ -535,3 +562,5 @@ The existing policy/privacy layer remains applicable: timely microphone/AI discl
 ## Handoff boundary
 
 Application code was not modified. Saved design decisions are not proof of implementation, testing, performance, headset comfort, or platform compliance. Future implementation remains a separate user-directed increment.
+
+

@@ -21,6 +21,9 @@ For every Group 2–7 interaction, check these during formal design. If a design
 3. **Entry/exit/resume:** Fast cold start, minimal setup, immediate useful architecture, and restore the last useful state. Preserve view, focus, and private work on pause. Clear Back, Full Model, Return to Live, and Leave Meeting where relevant; no hidden state loss. Resolve live-session resume versus exact personal-state restoration explicitly during design.
 4. **Bus-stop test:** Complete one meaningful, satisfying unit of work in about ten minutes or less at the user's chosen depth—not a fixed script or session limit. Examples: inspect a dependency path, focus one area, prepare a presentation focus, raise a useful question, save a private note, compare an alternative.
 
+## Global keyboard and text-entry placement
+
+Follow [global-spatial-input-rules.md](global-spatial-input-rules.md) across Groups 1–7. Use the platform/system virtual keyboard rather than a custom ASL keyboard. User-defined targets: main form 0.8–1.2 m in front of the seated head; temporary keyboard 0.5–0.8 m lower-front. Keep active field/value visible, avoid obscuring controls, restore layout when closed, and preserve typed work. Keyboard Done is not form submission. Distances are placement targets, not physical reach requirements or verified Meta rules; OS placement support and actual comfort require verification. Hands-only typing/navigation remains possible without voice or distant touching.
 ## Shared spatial and state language
 
 - Center: primary architecture. Near-space: persistent personal work. Surrounding panels support the center without clutter or excessive head turning.
@@ -58,7 +61,26 @@ Product/core UX locked by the user on 2026-10-18. Read [the Group 2 design speci
 
 **Recovery/quality:** Restrained Confirmed/Source-backed or likely/Needs confirmation states; retry/back for source failure, review sources when no usable architecture exists; understandable panel closing, Projects/Back/Recenter and unsaved exit behavior. Retain all cross-cutting comfort, privacy and testing gates. No open questions for Group 2 core UX; technical implementation choices remain separate.
 
-## Group 3 — Views + Spatial Representation
+## Follow-up stored 2026-10-19 — confirmation and correction interactions
+
+See [correction-mode-hand-interaction-notes.md](correction-mode-hand-interaction-notes.md) for saved hand roles, movement, original supplied discussion, and two new images indexed in the Group 2 specification. Documentation only. The user finalized confirmation routing on 2026-10-19: the popup belongs to Group 2 and opens ONLY after an explicit press of Confirm Architecture. Never open it on review load, exploration, Edit/Correction Mode, Group 3 Done, or return from correction. Cancel closes it and leaves the user in Group 2 without confirming. Confirm commits acceptance of the reviewed model; after successful confirmation, show Architecture Confirmed and return to Project Home. Group 3 Done saves corrected candidate work and returns to Group 2 review without final acceptance. Backend save/failure mechanics remain implementation details, not grounds to change this routing. The later locked handoff on 2026-10-19 resolves Group 3 as Correction Editor. Earlier Views material is retained below for future placement rather than defining current Group 3 scope. No implementation or scope replacement is authorized by storing these materials.
+
+## Group 3 — Correction Editor (LOCKED 2026-10-19)
+
+The latest user handoff resolves the previous scope conflict: Group 3 is the temporary Correction Editor dependent on Group 2 reconstruction. Read [group3-correction-editor-spec.md](group3-correction-editor-spec.md) for the complete locked definition and its current image inventory. Documentation only; implementation is not authorized.
+
+**Lifecycle:** Group 2 Review → Edit/Correction Mode → correct existing reconstructed candidate → Done/save → Group 2 Review again → Confirm Architecture → Project Home. No empty-canvas entry and no final confirmation owned by Group 3.
+
+**Scope:** Move, rename, change type, delete/add preset boxes; delete/create connections; Undo/Redo; Done. Stable node identity preserves connections through rename/type/move. Move requires explicit activation and stays on X/Y with Z constrained, subtle snapping and automatic rerouting. Connections use source/destination selection and confirmation, never freehand paths, endpoint manipulation, reverse or reconnect tools. Deleting boxes warns about attached connections and supports Undo.
+
+**Hands/layout:** Ray + pinch for selection/activation/confirmation; grab/pinch-hold only in explicit Move mode. Optional voice rename with a hand-only text path. Center-front existing architecture; near toolbar Add/Connector/Undo/Redo/Done replaces the Group 2 toolbelt. Top Back to Review/Correction Mode/Recenter, compact selection menus, visible mode/hover/selection/preview feedback, no giant inspector, roomscale or extra custom gestures.
+
+**State/safety:** Corrections edit the structured candidate, not source pixels. Back to Review must handle changed work through candidate autosave or an appropriate save/discard prompt and never confirm implicitly. Group 2 owns canonical acceptance. Use incremental node/connected-arrow updates; verify actual Meta primitives/event rules before implementation. The supplied 60 FPS event claim remains unverified. Existing comfort/privacy/short-use criteria apply.
+
+### Historical spatial-view planning — former Group 3 label, placement pending
+
+The material below is retained for future spatial-view design. It is not the current Group 3 correction scope; its final group placement has not been decided.
+
 
 **Purpose:** Decide how an existing canonical model is shown without rewriting its truth.
 
@@ -71,6 +93,53 @@ Product/core UX locked by the user on 2026-10-18. Read [the Group 2 design speci
 **Tests designed with this group:** Seated whole-view scale/rotation, distance interaction, semantic Open versus physical scale, and recenter. Verify View edits never mutate canonical truth and settings persist per View. Measure zoom/focus frame time, visibility culling, and appropriate detail reduction; consider batching/instancing/LOD when evidence supports them.
 
 ## Group 4 — Presentation + Audience
+
+### Stage 1 — Home entry + Open confirmed architecture (LOCKED 2026-10-20)
+
+Read [group4-stage1-entry-and-open-spec.md](group4-stage1-entry-and-open-spec.md) for the complete written handoff and three indexed [reference images](group4-reference-images/). Only two logical screens are locked: Home card actions and the opened confirmed architecture (collapsed/open panel variants). Documentation only; no implementation or redesign.
+
+Confirmed Home cards expose only Open/Create Presentation; unconfirmed cards continue review and cannot create presentations. Preserve Home/Meetings/My Space/Inbox/Settings navigation. Open and Create Presentation are distinct; presentation setup is a later stage.
+
+Open reuses Group 2 spatial grammar without review/confirmation/correction prompts: actual architecture name in the top Projects/name/Recenter header, architecture center-front, familiar toolbelt, collapsed Sources tab on the left, Presentations as the default right-side purpose. Attach/AI/Evidence temporarily replace that purpose, and closing returns to Presentations; never stack all purposes. No permanent Home navigation or profile avatar in the immersive workspace.
+
+Lasso selects context and never creates a presentation automatically. Inspection grab/depth leaves parent architecture visible and does not edit topology; no fabricated internals. Head gaze can softly pre-focus large cards/edge tabs, but action requires explicit pinch; precise object/UI actions remain hand-directed. Source images contain outdated Home sidebar labels and a Home-versus-Projects back-label difference; the written handoff wins.
+
+### Stage 2 — Presentation Setup (agreed handoff 2026-10-20)
+
+Read [group4-stage2-presentation-setup-spec.md](group4-stage2-presentation-setup-spec.md) and its [saved image](group4-reference-images/04-stage2-presentation-setup.png). Entry: confirmed Home architecture card → overflow → Create Presentation; architecture is already selected. Keep normal app shell, not immersive drawers/toolbelt. Collect only name, purpose (picker/Custom), and optional presentation collaborators.
+
+Collaborator picker offers known members and Add by email with minimal Collaborator/Viewer permissions. Explicit invitation behavior is scoped to the presentation; it neither grants project authority nor adds meeting attendees. Compact people chips allow review/removal. Use the global system-keyboard rule for text input; no custom keyboard. Head gaze only softly assists targeting; hands explicitly act.
+
+Back returns to prior Home/project context, with Stay/Discard protection for meaningful unsaved data unless an agreed draft-autosave behavior preserves it. No unnecessary X/new Exit. Continue requires a name and confirmed architecture, saves a draft and proceeds to Discussion Scope / Presentation Content Selection; it does not start presenting or join a meeting. No backend/Unity implementation authorized. Later stages remain to be designed.
+### Stage 3 — Presentation context / optional lasso (handoff 2026-10-20)
+
+Read [group4-stage3-lasso-selection-spec.md](group4-stage3-lasso-selection-spec.md) with its [primary reference](group4-reference-images/05-stage3-lasso-selection.png). Setup Continue leaves the Home shell for a Group-2-style immersive architecture workspace. Full confirmed architecture is visible; whole architecture is the default context. No separate Whole/Lasso choice screen. Side panels stay collapsed unless explicitly opened; no new dashboard/navigation, thumbnails or progress wizard.
+
+Optional focused path: choose Lasso → hand ray + pinch-hold → small comfortable arc projected onto architecture plane → release → subtle selected-area preview. Grab is inspection-only and never defines scope or becomes a prerequisite for Next. Selected nodes retain canonical layout/IDs; a temporary 5–15 cm-equivalent depth preview is allowed. Non-selected architecture stays visible with reduced emphasis.
+
+Next accepts whole architecture when no selection exists, or the lasso context when selected, with no popup. Clear Selection restores whole default. Context stores existing architecture/version/node/connection/evidence/content references, not duplicated architecture/documents or automatic access to private content. Gaze softly assists targets only; pinch remains required.
+
+User placement targets: working plane 0.9–1.3 m (main focus 1.0–1.2 m), lower-front toolbelt 0.5–0.8 m, Next/Clear 0.7–1.0 m; these are visual distances, not required reach or verified Meta specifications. Keep the seated two-foot action radius. No implementation authorized; next preparation stage remains separate.
+### Stage 4 — Discussion Preparation (handoff 2026-10-20)
+
+Read [group4-stage4-discussion-preparation-spec.md](group4-stage4-discussion-preparation-spec.md) and its [primary image](group4-reference-images/06-stage4-discussion-preparation.png). Stage 3 Next enters this immersive stage: Project Sources left (existing collapse behavior), unchanged canonical architecture/current scope center, Discussion Preparation right, familiar bottom toolbelt/top header. No Home shell or new layout.
+
+Right panel shows Current Scope, relevant existing Questions/Notes/Evidence/AI Findings and grounded advisory AI suggestions. Select an item → Add to Discussion → small confirmation; no card dragging, copying or automatic AI insertion. New Question creates contextual project knowledge and is optionally referenced by the presentation. Ask AI/Evidence temporarily replace the right-side purpose, then Back returns to Discussion Preparation. One right-side purpose at a time.
+
+Lasso changes update scope/context/suggestions without editing topology or silently removing already-added items. Stage Back returns to context selection preserving work; Next saves references/scope and advances to Success / Normal Flow preparation, not a meeting or completed presentation.
+
+All detailed actions use small hand ray + hover + pinch; lasso uses pinch-hold/small arc/release. Optional voice/text inputs use global system-keyboard rules. Head movement only softly pre-highlights; it never activates. User placement targets: architecture 1.0–1.2 m, panels 0.9–1.2 m, toolbelt 0.5–0.8 m; seated physical action stays within roughly two feet. The reference's four-component label/boundary is illustrative and must not override accurate scope membership. No backend/Unity implementation authorized.
+### Continuation — Presentation Builder / Scenario Authoring / Meeting Bridge (prompt and 11 images saved 2026-10-21)
+
+Read [group4-presentation-builder-and-meeting-bridge-spec.md](group4-presentation-builder-and-meeting-bridge-spec.md). This follows and preserves Discussion Preparation. Eleven continuation images are saved/indexed in the spec (references 07–17), including settings/lasso composites and the meeting bridge. Generated-image conflicts are explicitly recorded. Documentation only; no implementation, code generation or Group 5 work authorized.
+
+All scenario screens reference the same immutable confirmed architecture with screen-specific visual overrides and distinguishable scenario-only overlay connections. Builder grammar: created content/screens left, active work center, variable Add Screen/AI/settings right. Draft placeholders remain visibly distinct from completed screens. Context/docs are temporarily accessible without dominating authoring; Discussion Notes remain supported.
+
+Add Screen → center scenario form → right AI grounded understanding (facts versus user scenario versus assumptions) → explicit confirmation → semantic light-3D architecture view → compact component/connection visual controls → preview/adjust/apply → screen confirmation → builder list. AI maps voice/text only to supported deterministic visual operations and never silently applies changes or mutates canonical truth. Lasso selects targets for these scoped operations.
+
+Meeting is a presentation-level header action. Setup chooses attendees/additional emails and initial Start From screen for the whole presentation. Collaboration permissions and meeting attendance are separate. Scheduled confirmation returns to the presentation workspace; Start Now bridges to Group 5. Detailed source/reference and interaction rules remain in the handoff; images will be indexed later.
+**Ending clarification (2026-10-21):** The user wants Home after the final Group 4 preparation sequence. The last image shows the immediate meeting-scheduled acknowledgment inside the builder; then finish/return to the approved Home/project context with work preserved. The exact trigger/timing is not yet specified; do not invent an automatic redirect or extra control. Start Now retains its explicit Group 5 route. No new Home image was included. The meeting setup illustration includes a not-created draft as a shared-screen chip; this visual inconsistency does not approve draft sharing and needs resolution before implementation.
+### Earlier broader presentation planning — retained discussion context
 
 **Purpose:** Prepare and present a View for an audience and purpose.
 
@@ -86,6 +155,16 @@ Product/core UX locked by the user on 2026-10-18. Read [the Group 2 design speci
 
 ## Group 5 — Meeting + Shared State + My Space
 
+**Detailed handoff saved 2026-10-21:** [group5-live-meeting-spec.md](group5-live-meeting-spec.md), with [three reference images](group5-reference-images/). The user corrected an initial Group 6 label to Group 5. This handoff governs live meeting behavior; earlier broad notes below remain discussion context.
+
+Group 4's prepared presentation supplies many screens within one live session. Left collapsible Screens/Participants; center presenter-controlled shared state; right Meeting Context with approved Docs/Questions/Notes/AI Findings/Evidence and explicitly raised items. Temporary shared-doc/component/context views use one right-side purpose, not stacked permanent panels.
+
+Host and Presenter are separate. Pass Presentation sends a request; selected participant Accepts/Declines before control changes. Host retains meeting authority and Take Back control. Private exploration never changes shared state; Return to Live returns to the current presenter state NOW.
+
+Every participant has private-by-default near-user My Space: Notes, Questions, AI, Snapshots. Explicit Share to Meeting creates a scoped shared reference with classification (Question/Finding/Discussion Point/Action Suggestion), preserving the private original. No automatic private/project exposure or AI publication; PROJECT_VISIBLE promotion is later. Shared-reference update semantics and temporary presenter return-state restoration remain to be settled before implementation.
+
+Meeting toolbelt: Mic, Raise, Snapshot, AI, My Space, Return to Live. Hands ray + pinch; optional near poke/voice; system keyboard for text. Head gaze never activates. Snapshots preserve structured meeting/architecture/screen context and are private by default. Group 6 later structures addressed/unresolved/decision/action outcomes; none implemented here.
+
 **Purpose:** Run a live shared architecture session while preserving private participant work.
 
 **Screens/states:** Meetings Home; Pre-Meeting Preparation; Presenter/Participant Live Views; My Space During Meeting; Raise Point; Shared Question state. Discussion content continues into Group 6.
@@ -98,7 +177,20 @@ Product/core UX locked by the user on 2026-10-18. Read [the Group 2 design speci
 
 **Tests designed with this group:** Near-space comfort; obvious Return to Live; control handoff and restoration; private exploration without disorientation. Verify privacy, reconnect, and state separation. Test multiple users; measure network frequency separately from rendering, avoid unnecessary transform synchronization, and profile shared architecture plus My Space together.
 
-## Group 6 — Questions → Discussion → Trade-offs → Decisions → Work
+**Group 5 interaction addendum (2026-10-21):** The live-meeting spec now contains the remaining 25 hand/pinch/distance rules. Small chest-to-lap ray + hover + pinch actions govern screen/participant navigation, control transfer, docs, private inspection, My Space, explicit classified sharing, snapshots, Raise, AI and Mic. No swipes, dragging notes, camera hand poses, custom palm/head commands or required distant touch. Return to Live follows the current presenter NOW. Raise never unmutes; private AI stays private.
+
+Host End Meeting now explicitly opens End Meeting? → Cancel / End Meeting; gaze alone never ends it. Transfer still requires the recipient's Accept, with host Take Back separately authorized. Lightweight hover/pressed/success feedback and enlarged hit targets support error prevention. Placement targets: architecture 1.0–1.2 m; header 1.0–1.3 m; side panels 0.9–1.2 m; toolbelt/My Space/keyboard 0.5–0.8 m; private inspection object 0.6–0.9 m. These are visual targets, not required reach; physical actions stay within the seated two-foot radius. No implementation authorized.
+## Group 6 — Meeting Review → Structured Outcomes → Save to Project
+
+**Detailed handoff saved 2026-10-21:** [group6-meeting-review-and-outcomes-spec.md](group6-meeting-review-and-outcomes-spec.md), with [two saved reference images](group6-reference-images/). This latest scope supersedes earlier exploratory live-discussion/proposal/ticket plans below; no extra features are authorized by those older notes.
+
+After host-confirmed End Meeting, freeze appropriate shared/session context for review; exclude unshared My Space. Spatial category cards show Questions, Notes, Decisions, Actions, Unresolved, Snapshots/Evidence, with optional Findings/Discussion categories. Selected category comes forward, then an individual item comes closer; Back reverses those bounded levels. Use pagination (roughly 4–6 readable items), not long dashboard scrolling or required walking.
+
+AI organizes/summarizes/classifies as drafts; humans review/edit/confirm. Questions distinguish Addressed/Unresolved/Deferred/Not Discussed and link discussion, decisions, actions and architecture context. Preserve structured decisions, action owner/due date/status, unresolved/deferred work and referenced snapshots/evidence. No automatic promotion of findings to truth, forced resolution, duplicated documents, canonical edits or new recording scope.
+
+Save to Project → small confirmation of structured outcomes → successful save → Saved feedback → Home. Existing Home cards receive lightweight latest-meeting activity/outcome counts without redesign. View in Architecture is reversible inspection. Hands ray + hover + pinch, optional voice/system typing, soft gaze assist without activation, forward seated distances and two-foot actions remain required. Old live Mic/Raise/Return to Live controls in the close-up image are not post-meeting requirements.
+
+### Historical Group 6 exploration — superseded where inconsistent with the post-meeting handoff
 
 **Purpose:** Preserve context from a private thought through collective reasoning to an actionable outcome. This remains the main unfinished design area.
 
@@ -269,4 +361,16 @@ backend/
 **Still undecided:** Do not create top-level `proposals/` yet. Determine whether a proposal is an independent aggregate or a state/type owned by model, discussions, or decisions. Decide action ownership after Group 6 despite its illustrative placement above. Clarify project-configuration layers versus canonical model layers. The sketch is not exhaustive: existing preferences and other established responsibilities must retain an explicit owner in any future migration. No domain or data is removed merely because it is absent from this sketch.
 
 Keep this proposal appendix last when extending the main product-discussion sections.
+
+
+
+
+
+
+
+
+
+
+
+
 

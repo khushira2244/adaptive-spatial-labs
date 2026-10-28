@@ -1,3 +1,5 @@
+import { eq } from 'drizzle-orm';
+import { sourceReferences, ingestionRuns } from './provenance.schema.js';
 import type { z } from 'zod';
 import type { Database } from '../../shared/database/client.js';
 import type { StorageProvider } from '../../shared/storage/storage-provider.js';
@@ -27,6 +29,23 @@ export class SourceService {
   async remove(id: string, sourceId: string, userId: string) {
     const removed = await this.db.transaction(async (tx) => {
       await new ProjectAuthorization(tx, true).requireProjectEditorOrOwner(id, userId);
+      const scopedSource = await new SourceRepository(tx).get(id, sourceId);
+      if (!scopedSource) throw new AppError('SOURCE_NOT_FOUND', 'Source not found.');
+      const retained = await tx
+        .select({ id: sourceReferences.id })
+        .from(sourceReferences)
+        .where(eq(sourceReferences.sourceId, sourceId))
+        .limit(1);
+      const attempts = await tx
+        .select({ id: ingestionRuns.id })
+        .from(ingestionRuns)
+        .where(eq(ingestionRuns.sourceId, sourceId))
+        .limit(1);
+      if (retained.length || attempts.length)
+        throw new AppError(
+          'DOMAIN_CONFLICT',
+          'Source has retained provenance and cannot be removed.',
+        );
       const source = await new SourceRepository(tx).remove(id, sourceId);
       if (!source) throw new AppError('SOURCE_NOT_FOUND', 'Source not found.');
       return source;

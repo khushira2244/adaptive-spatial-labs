@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using AdaptiveSpatialLabs.UI.Components.Panels;
 using AdaptiveSpatialLabs.UI.DesignSystem;
 using AdaptiveSpatialLabs.UI.DesignSystem.Icons;
+using ASLIconKind = AdaptiveSpatialLabs.UI.DesignSystem.Icons.IconKind;
 
 namespace AdaptiveSpatialLabs.Editor.UI
 {
@@ -32,7 +33,7 @@ namespace AdaptiveSpatialLabs.Editor.UI
             text.overflowMode=TextOverflowModes.Ellipsis; text.alignment=TextAlignmentOptions.MidlineLeft;
             rect.gameObject.AddComponent<ThemedText>().Configure(theme,style,secondary); return text;
         }
-        public static LineIcon Icon(string name,Transform parent,IconKind kind,DesignTheme theme)
+        public static LineIcon Icon(string name,Transform parent,ASLIconKind kind,DesignTheme theme)
         { var icon=Rect(name,parent).gameObject.AddComponent<LineIcon>(); icon.Kind=kind; icon.color=theme.Colors.TextPrimary; icon.raycastTarget=false; return icon; }
         public static GameObject Save(GameObject instance,string relativePath)
         {

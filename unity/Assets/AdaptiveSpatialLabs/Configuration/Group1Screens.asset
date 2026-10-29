@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10119624049d8fe4ebc42dcfe688ebac, type: 3}
+  m_Name: Group1Screens
+  m_EditorClassIdentifier: ASL.UI::AdaptiveSpatialLabs.UI.Screens.ScreenRegistry
+  screens:
+  - Route: 0
+    Prefab: {fileID: 6231908073541011534, guid: 1df73bf3cbeeb844f9b35fa38a6decc9, type: 3}
+  - Route: 1
+    Prefab: {fileID: 4058356196956214426, guid: 29eb05ebcc6a70041b5511700c54bac7, type: 3}
+  - Route: 2
+    Prefab: {fileID: 1278833596750991966, guid: 8bc955fabe9e9944f958a502bbfb5a7b, type: 3}
+  - Route: 3
+    Prefab: {fileID: 2273079266155005890, guid: c6fa3b84216a7404e8c87fc8e70976bf, type: 3}
+  - Route: 4
+    Prefab: {fileID: 7090299124654102244, guid: 9729d8f6605aca54c9db1dac9dfa6355, type: 3}
+  - Route: 5
+    Prefab: {fileID: 6552340456648993895, guid: 2aa5bfeba6d5a95449c68b0b2ed44e41, type: 3}
+  - Route: 6
+    Prefab: {fileID: 1116253251096522710, guid: e89904a62051c03439ef262a4099b1f1, type: 3}
+  - Route: 7
+    Prefab: {fileID: 4158355739321694370, guid: cffe37358aafb9348a42f0c3369042cd, type: 3}
+  - Route: 8
+    Prefab: {fileID: 6494036249952207081, guid: c7f8b994bcd02504eb8e3b78faa3cbd6, type: 3}
+  - Route: 9
+    Prefab: {fileID: 7522643961265617842, guid: ab450c42edb0ebc4b8030b86a70bee58, type: 3}
+  - Route: 10
+    Prefab: {fileID: 81482388202016647, guid: 4d47fa4708493fa4e9e253c3a6938d94, type: 3}
+  - Route: 11
+    Prefab: {fileID: 5851418111431687451, guid: a76416aabff97d34a8543b88be27d25d, type: 3}
+  - Route: 12
+    Prefab: {fileID: 3071293983738526030, guid: 01d5fbe12d4f7ce49af13439b315c4d9, type: 3}
+  - Route: 13
+    Prefab: {fileID: 9162668899942829606, guid: 0ee5279d4f3007246924e8c675b4b116, type: 3}
+  - Route: 14
+    Prefab: {fileID: 4694191047632206329, guid: 1e7abfe522dcbf648818a458ef8fc041, type: 3}

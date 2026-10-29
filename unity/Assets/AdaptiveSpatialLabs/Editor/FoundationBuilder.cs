@@ -17,6 +17,7 @@ namespace AdaptiveSpatialLabs.Editor
         public static void Build()
         {
             if(EditorApplication.isPlaying)throw new System.InvalidOperationException("Stop Play mode before rebuilding assets.");
+            if(!ThemeAssetBuilder.EnsureEssentialResources())return;
             Directory.CreateDirectory(FoundationPaths.Root+"/Scenes"); AssetDatabase.Refresh();
             var theme=ThemeAssetBuilder.Build(); var api=ThemeAssetBuilder.Api();
             ComponentLibraryBuilder.Build(theme);

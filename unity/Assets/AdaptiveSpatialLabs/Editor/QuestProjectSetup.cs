@@ -11,7 +11,7 @@ using UnityEngine.XR.Management;
 using UnityEngine.XR.OpenXR;
 using UnityEngine.XR.OpenXR.Features.Interactions;
 using UnityEngine.XR.OpenXR.Features.Meta;
-using UnityEngine.XR.OpenXR.Features.MetaQuestSupport;
+
 
 namespace AdaptiveSpatialLabs.Editor
 {
@@ -67,7 +67,7 @@ namespace AdaptiveSpatialLabs.Editor
             if(settings==null)throw new InvalidOperationException("OpenXR settings are unavailable for "+target);
             settings.renderMode=OpenXRSettings.RenderMode.SinglePassInstanced;
             Enable<OculusTouchControllerProfile>(settings);
-            if(target==BuildTargetGroup.Android) { Enable<MetaQuestFeature>(settings); Enable<ARCameraFeature>(settings); }
+            if(target==BuildTargetGroup.Android) {  Enable<ARCameraFeature>(settings); }
             EditorUtility.SetDirty(settings); EditorUtility.SetDirty(general); EditorUtility.SetDirty(general.Manager); EditorUtility.SetDirty(store);
         }
         private static void Enable<T>(OpenXRSettings settings) where T:UnityEngine.XR.OpenXR.Features.OpenXRFeature
